@@ -1,5 +1,5 @@
-#ifndef _COMMON_RESULT_H_
-#define _COMMON_RESULT_H_
+#ifndef _COMMON_H_
+#define _COMMON_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,4 +15,4 @@ typedef enum {
 }
 #endif
 
-#endif /*_COMMON_RESULT_H_*/
+#endif /*_COMMON_H_*/
