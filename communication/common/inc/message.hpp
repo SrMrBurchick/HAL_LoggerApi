@@ -27,7 +27,7 @@ typedef enum : std::uint8_t {
 
 #pragma pack(push, 1)
 
-typedef struct message_header_st {
+typedef struct message_header {
     std::uint8_t msg_id;
     std::uint8_t src_id;
     std::uint8_t dst_id;
@@ -38,11 +38,16 @@ typedef struct message_header_st {
     std::uint16_t data_length;
 } message_header_st_t;
 
-typedef struct message_st {
+typedef struct message {
     message_header_st_t header;
     std::uint8_t *data_p;
     std::uint32_t crc;
 } message_st_t;
+
+typedef struct empty_message {
+    message_header_st_t header;
+    std::uint32_t crc;
+} empty_message_st_t;
 
 #pragma pack(pop)
 
