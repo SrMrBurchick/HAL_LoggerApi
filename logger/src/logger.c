@@ -17,7 +17,6 @@
 #define MSG_SIZE            (285)
 
 static const char* st_logPrefix = "[%02d:%02d:%02d:%04d] [%s]: ";
-static const uint32_t st_loggerTaskTimeoutMs = 100;
 static uint8_t st_loggerBuffer[MSG_SIZE] = {0};
 static logLevel_t st_logLevel = eLogLevelInfo;
 
@@ -40,26 +39,33 @@ static void st_log_msg(const char* log, const char* fmt, va_list vargs) {
     hours = minutes / MINUTES_PRESCALER;
 
     if (minutes >= MINUTES_PRESCALER) {
-    	minutes = minutes % MINUTES_PRESCALER;
+        minutes = minutes % MINUTES_PRESCALER;
     }
 
     if (seconds >= SECONDS_PRESCALER) {
-    	seconds = seconds % SECONDS_PRESCALER;
+        seconds = seconds % SECONDS_PRESCALER;
     }
 
     if (mseconds >= MSECONDS_PRESCALER) {
-    	mseconds = mseconds % MSECONDS_PRESCALER;
+        mseconds = mseconds % MSECONDS_PRESCALER;
     }
 
     memset(st_loggerBuffer, 0, MSG_SIZE);
-    sprintf(st_loggerBuffer, st_logPrefix, hours, minutes, seconds, mseconds, log);
-    vsprintf(st_loggerBuffer + strlen(st_loggerBuffer), (char*)fmt, vargs);
-    g_logger.send_msg(st_loggerBuffer, (uint16_t)strlen(st_loggerBuffer));
+
+    sprintf((char *)st_loggerBuffer, st_logPrefix, hours, minutes, seconds,
+            mseconds, log);
+
+    vsprintf((char *)(st_loggerBuffer + strlen((char *)st_loggerBuffer)),
+             (char*)fmt, vargs);
+
+    g_logger.send_msg((const char *)st_loggerBuffer,
+                      (uint16_t)strlen((char *)st_loggerBuffer));
 }
 
 
 result_t loggerInit() {
     if (NULL == g_logger.init) {
+
         return eResultFailed;
     }
 
@@ -68,6 +74,7 @@ result_t loggerInit() {
 
 result_t loggerSetLogLevel(logLevel_t level) {
     if (eLogLevelsCount <= level) {
+
         return eResultFailed;
     }
 
