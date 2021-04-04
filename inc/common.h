@@ -6,9 +6,10 @@ extern "C" {
 #endif
 
 typedef enum {
-    eResultSucces = 0,
-    eResultFailed = 1,
+    eResultSucces         = 0,
+    eResultFailed         = 1,
     eResultNotInitialized = 2,
+    eResultInvalidParam   = 3,
 } result_t;
 
 #ifdef __cplusplus
