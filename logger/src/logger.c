@@ -20,7 +20,7 @@ static const char* st_logPrefix = "[%02d:%02d:%02d:%04d] [%s]: ";
 static uint8_t st_loggerBuffer[MSG_SIZE] = {0};
 static logLevel_t st_logLevel = eLogLevelInfo;
 
-logger_st_t g_logger;
+logger_ops_st_t g_logger;
 
 static void st_log_msg(const char* log, const char* fmt, va_list vargs) {
     uint32_t hours = 0;
@@ -63,11 +63,18 @@ static void st_log_msg(const char* log, const char* fmt, va_list vargs) {
 }
 
 
-result_t loggerInit() {
-    if (NULL == g_logger.init) {
+result_t loggerInit(logger_ops_st_t *logger_ops) {
 
-        return eResultFailed;
+    if (NULL == logger_ops ||
+        NULL == logger_ops->init ||
+        NULL == logger_ops->get_sys_time ||
+        NULL == logger_ops->send_msg ||
+        NULL == logger_ops->start) {
+
+        return eResultInvalidParam;
     }
+
+    memcpy(&g_logger, logger_ops, sizeof(logger_ops_st_t));
 
     return g_logger.init();
 }
