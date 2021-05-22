@@ -16,6 +16,10 @@
 #define MINUTES_PRESCALER   (60)
 #define MSG_SIZE            (285)
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 static const char* st_logPrefix = "[%02d:%02d:%02d:%04d] [%s]: ";
 static uint8_t st_loggerBuffer[MSG_SIZE] = {0};
 static logLevel_t st_logLevel = eLogLevelInfo;
@@ -93,7 +97,7 @@ result_t loggerSetLogLevel(logLevel_t level) {
 void logDebugMsg(const char* fmt, ...) {
     va_list valist;
 
-    if (eLogLevelDebug >= st_logLevel) {
+    if (eLogLevelDebug <= st_logLevel) {
         va_start(valist, fmt);
         st_log_msg(DEBUG, fmt, valist);
         va_end(valist);
@@ -103,7 +107,7 @@ void logDebugMsg(const char* fmt, ...) {
 void logInfoMsg(const char* fmt, ...) {
     va_list valist;
 
-    if (eLogLevelInfo >= st_logLevel) {
+    if (eLogLevelInfo <= st_logLevel) {
         va_start(valist, fmt);
         st_log_msg(INFO, fmt, valist);
         va_end(valist);
@@ -120,7 +124,7 @@ void logErrorMsg(const char* fmt, ...) {
 void logTraceMsg(const char* fmt, ...) {
     va_list valist;
 
-    if (eLogLevelTrace == st_logLevel) {
+    if (eLogLevelTrace <= st_logLevel) {
         va_start(valist, fmt);
         st_log_msg(TRACE, fmt, valist);
         va_end(valist);
@@ -138,3 +142,8 @@ void loggerStart(const char* fmt, ...) {
     g_logger.start(fmt, valist);
     va_end(valist);
 }
+
+#ifdef __cplusplus
+}
+#endif
+
